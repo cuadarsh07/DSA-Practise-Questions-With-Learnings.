@@ -1,0 +1,68 @@
+import java.util.Arrays;
+
+class Solution {
+    public int maximizeCuts(int n, int x, int y, int z) {
+        
+        int[] dp = new int[n+1];
+        Arrays.fill(dp,-1);
+        
+        int ans = solveMem(n,x,y,z,dp);
+        
+       if(ans < 0) return 0;
+        
+        return ans;
+        
+        
+        
+    }
+
+    
+    private int solveMem(int n, int x, int y, int z,int[] dp) {
+        
+        if(n == 0) return 0;
+        if (n < 0) return Integer.MIN_VALUE;
+        
+        
+        if(dp[n] != -1) return dp[n];
+        
+        int a = solveMem(n-x, x, y, z, dp) + 1;
+        int b = solveMem(n-y, x, y, z, dp) + 1;
+        int c = solveMem(n-z, x, y, z, dp) + 1;
+        
+         dp[n] = Math.max(a, Math.max(b, c));
+        
+         
+        
+        return dp[n];
+        
+        
+        
+    }
+}
+
+
+
+
+/*
+ * Problem: Maximize The Cut Segments (GFG)
+ *
+ * DP Pattern:
+ *   - 1D DP — Unbounded Choice / Coin Change Variant (Maximization): You have a target size n and fixed step sizes (x, y, z) that can be reused unlimited times to maximize the total count of steps.
+ *     Given a target length `n` and reusable cut lengths (`x`, `y`, `z`),
+ *     find the maximum number of segments that sum up to `n`.
+ *
+ * Intuition & Approach:
+ *   - Core Idea: At any length `n`, try making a cut of `x`, `y`, or `z`,
+ *     adding `1` segment to the best result from the remaining length (`n - cut`).
+ *   - Base Cases:
+ *       * n == 0 -> Valid complete cut, returns 0 segments.
+ *       * n < 0  -> Invalid cut, returns Integer.MIN_VALUE (-inf) so Math.max ignores it.
+ *   - Recurrence:
+ *       dp[n] = 1 + max(solve(n - x), solve(n - y), solve(n - z))
+ *   - Edge Case:
+ *       If `ans < 0`, no valid cut combination exists -> return 0.
+ *
+ * Complexity:
+ *   - Time:  O(N) — Each state from 1 to N is computed once.
+ *   - Space: O(N) — `dp` array of size N + 1 plus recursion call stack.
+ */
